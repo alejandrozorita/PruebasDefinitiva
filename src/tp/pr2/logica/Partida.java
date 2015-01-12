@@ -47,6 +47,7 @@ public class Partida {
 		turno = reglas.jugadorInicial();
 		ganador = Ficha.VACIA;
 		terminada = false;
+		pila = new Pila();
 	}
 
 	/**
@@ -57,6 +58,14 @@ public class Partida {
 		turno = Ficha.BLANCA;
 		pila.reset();
 		reseteada = true;
+	}
+	
+	public void reset(ReglasJuego reglas){
+		this.tablero = reglas.iniciaTablero();
+		turno = reglas.jugadorInicial();
+		ganador = Ficha.VACIA;
+		reseteada = true;
+		terminada = false;
 	}
 	
 	/**
@@ -81,22 +90,22 @@ public class Partida {
  * @param col
  * @return posible
  */
-	public boolean ejecutaMovimiento(Ficha color, int col){
+	public boolean ejecutaMovimiento(Movimiento movimiento){
 		boolean posible = true;
 		int auxContadorArrayJugadas = 1;
 		
 		//En caso de que la partida no este terminada
 		if(!terminada){	
 			//Si la columna esta en rango pasa el if
-			if (col > 0 && col < tablero.getAncho()+1) {	
+			if ((movimiento.getColumnaMovimiento() > 0) &&(movimiento.getColumnaMovimiento() < tablero.getAncho()+1)) {	
 				//Si es posible ejecutar movimiento Salta este if y va al else
-				if ((turno == Ficha.VACIA) ||(turno != color) || (tablero.fichaUltimaJugada(col) < 0)) {
+				if ((turno == Ficha.VACIA) ||(turno != movimiento.getJugador()) || (tablero.fichaUltimaJugada(movimiento.getColumnaMovimiento()) < 0)) {
 					posible = false;
 				}
 				else
 				{
 					reseteada = false;
-					tablero.setCasilla(col, tablero.fichaUltimaJugada(col) + 1, color);
+					tablero.setCasilla(movimiento.getColumnaMovimiento(), tablero.fichaUltimaJugada(movimiento.getColumnaMovimiento()) + 1,  movimiento.getJugador());
 					if (turno == Ficha.BLANCA) {
 						turno = Ficha.NEGRA;
 					} else if(turno == Ficha.NEGRA) {
@@ -105,7 +114,7 @@ public class Partida {
 					if (pila.getContadorArrayJugadas() == 10) {
 						pila.desplazarArray();
 						auxContadorArrayJugadas = auxContadorArrayJugadas + pila.getContadorArrayJugadas();
-						pila.setArrayJugadas(auxContadorArrayJugadas - 1, col);
+						pila.setArrayJugadas(auxContadorArrayJugadas - 1, movimiento.getColumnaMovimiento());
 					}
 					else
 					{
@@ -113,7 +122,7 @@ public class Partida {
 						if(auxContadorArrayJugadas == 11){
 							auxContadorArrayJugadas = 10;
 						}
-						pila.setArrayJugadas(auxContadorArrayJugadas, col);
+						pila.setArrayJugadas(auxContadorArrayJugadas, movimiento.getColumnaMovimiento());
 						pila.plusPlusContador();
 					}
 					pila.aumentarContador();
@@ -392,50 +401,50 @@ public class Partida {
 	}
 	
 	public static void main(String[] args) {
-
-		Tablero NuevoTablero = new Tablero(5,5);
-		NuevoTablero.reset();
-		Partida nuevaPartida = new Partida(NuevoTablero);
-		for (int i = 1; i <= 6; i++) {		
-			for (int j = 0; j < 10; j++) {
-				System.out.print(nuevaPartida.pila.getArrayJugadas()[j]);
-			}
-			System.out.println();
-			nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), i);
-			NuevoTablero.pintarTablero();
-			System.out.println("-----------------");
-		}
-		System.err.println("segundo bucle");
-		for (int i = 1; i <= 6; i++) {		
-			for (int j = 0; j < 10; j++) {
-				System.out.print(nuevaPartida.pila.getArrayJugadas()[j]);
-			}
-			System.out.println();
-			nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), i);
-			NuevoTablero.pintarTablero();
-			System.out.println("---------------");
-		}
-		System.err.println("tercer bucle");
-		for (int i = 1; i <= 6; ++i) {		
-			for (int j = 0; j < 10; j++) {
-				System.out.print(nuevaPartida.pila.getArrayJugadas()[j]);
-			}
-			System.out.println();
-			nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), i);
-			NuevoTablero.pintarTablero();
-			System.out.println("----------------");
-		}
-		for (int i = 0; i < 11; i++) {
-			System.out.println("undo!");
-			nuevaPartida.undo();
-			NuevoTablero.pintarTablero();
-		}
-		System.out.println(nuevaPartida.getTablas());
-		
-		nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), 1);
-		NuevoTablero.pintarTablero();
-		nuevaPartida.undo();
-		NuevoTablero.pintarTablero();
+//
+//		Tablero NuevoTablero = new Tablero(5,5);
+//		NuevoTablero.reset();
+//		Partida nuevaPartida = new Partida(NuevoTablero);
+//		for (int i = 1; i <= 6; i++) {		
+//			for (int j = 0; j < 10; j++) {
+//				System.out.print(nuevaPartida.pila.getArrayJugadas()[j]);
+//			}
+//			System.out.println();
+//			nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), i);
+//			NuevoTablero.pintarTablero();
+//			System.out.println("-----------------");
+//		}
+//		System.err.println("segundo bucle");
+//		for (int i = 1; i <= 6; i++) {		
+//			for (int j = 0; j < 10; j++) {
+//				System.out.print(nuevaPartida.pila.getArrayJugadas()[j]);
+//			}
+//			System.out.println();
+//			nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), i);
+//			NuevoTablero.pintarTablero();
+//			System.out.println("---------------");
+//		}
+//		System.err.println("tercer bucle");
+//		for (int i = 1; i <= 6; ++i) {		
+//			for (int j = 0; j < 10; j++) {
+//				System.out.print(nuevaPartida.pila.getArrayJugadas()[j]);
+//			}
+//			System.out.println();
+//			nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), i);
+//			NuevoTablero.pintarTablero();
+//			System.out.println("----------------");
+//		}
+//		for (int i = 0; i < 11; i++) {
+//			System.out.println("undo!");
+//			nuevaPartida.undo();
+//			NuevoTablero.pintarTablero();
+//		}
+//		System.out.println(nuevaPartida.getTablas());
+//		
+//		nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), 1);
+//		NuevoTablero.pintarTablero();
+//		nuevaPartida.undo();
+//		NuevoTablero.pintarTablero();
 	}
 }
 

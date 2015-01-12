@@ -10,7 +10,6 @@ import tp.pr2.logica.Ficha;
 import tp.pr2.logica.ReglasConecta4;
 import tp.pr2.logica.ReglasJuego;
 import tp.pr2.logica.Tablero;
-import tp.pr2.logica.test.Utils;
 
 public class ReglasConecta4Test {
 	

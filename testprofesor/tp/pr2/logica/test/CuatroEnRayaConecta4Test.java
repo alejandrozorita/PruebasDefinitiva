@@ -110,11 +110,11 @@ public class CuatroEnRayaConecta4Test {
 		return true;
 	}	
 	
-	private void testCuatroEnRaya(int posX[], int posY[], int ultima, Ficha color) {
+	private void testCuatroEnRaya(int posX[], int posY[], int ultima, Ficha color, int idxPrepara) {
 		Partida p = new Partida(getReglas());
 		Tablero t = p.getTablero();
 
-		if (!preparaColocacionFicha(p, color, posX[ultima], posY[ultima]))
+		if (!preparaColocacionFicha(p, color, posX[idxPrepara], posY[idxPrepara]))
 			fail("Error interno en los test :-?");
 		
 		for (int i = 0; i < posX.length; ++i) {
@@ -139,8 +139,8 @@ public class CuatroEnRayaConecta4Test {
 	
 	private void pruebaCuatroEnRaya(int posX[], int posY[]) {
 		for (int i = 0; i < posX.length; ++i) {
-			testCuatroEnRaya(posX, posY, i, Ficha.BLANCA);
-			testCuatroEnRaya(posX, posY, i, Ficha.NEGRA);
+			testCuatroEnRaya(posX, posY, i, Ficha.BLANCA, i);
+			testCuatroEnRaya(posX, posY, i, Ficha.NEGRA, i);
 		}
 	}
 	
@@ -177,8 +177,8 @@ public class CuatroEnRayaConecta4Test {
 					posX[l] = x;
 					posY[l] = y + l;
 				}
-				testCuatroEnRaya(posX, posY, 0, Ficha.BLANCA);
-				testCuatroEnRaya(posX, posY, 0, Ficha.NEGRA);
+				testCuatroEnRaya(posX, posY, 0, Ficha.BLANCA, 3);
+				testCuatroEnRaya(posX, posY, 0, Ficha.NEGRA, 3);
 			}
 		}
 	}

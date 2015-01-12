@@ -21,8 +21,7 @@ public class ReglasConecta4 implements ReglasJuego{
 
 	@Override
 	public Ficha hayGanador(Movimiento ultimoMovimiento, Tablero t) {
-		Ficha ganador = Ficha.VACIA;
-		return ganador;
+		return ultimoMovimiento.getJugador();
 	}
 
 	@Override

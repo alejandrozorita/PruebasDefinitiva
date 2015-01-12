@@ -4,18 +4,17 @@ import tp.pr2.logica.Ficha;
 import tp.pr2.logica.Tablero;
 
 public class Pila {
-	private Movimiento [] arrayJugadas;
+	private int [] arrayJugadas;
 	private int contadorArrayJugadas;
 	
 	public Pila(){
-		this.arrayJugadas = new Movimiento[10];
+		this.arrayJugadas = new int[10];
 		contadorArrayJugadas = 0;
 	}
 	
 	public void reset(){
 		contadorArrayJugadas = 0;
-		arrayJugadas[contadorArrayJugadas].setJugador(Ficha.BLANCA);
-		arrayJugadas[contadorArrayJugadas].setColumnaMoviminento(-1);
+		arrayJugadas[contadorArrayJugadas] = -1;
 	}
 	
 	public void desplazarArray(){
@@ -41,9 +40,9 @@ public class Pila {
 	}
 	
 	public void setArrayJugadas(int contador, int columna){
-		arrayJugadas[contador - 1].ColumnaMovimiento = columna;
+		arrayJugadas[contador - 1] = columna;
 	}
-	public Movimiento [] getArrayJugadas(){
+	public int [] getArrayJugadas(){
 		return arrayJugadas;
 	}
 	
