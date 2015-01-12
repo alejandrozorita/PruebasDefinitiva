@@ -158,11 +158,13 @@ public class Tablero {
  	 */
  	public int fichaUltimaJugada(int x) {
  		int fila =-1;
- 		for (int i = 0; i < alto; i++) {
- 			if (tablero[x - 1][i].equals(Ficha.VACIA) ) {
-				fila = i; 
+ 		if(x > 0){
+	 		for (int i = 0; i < alto; i++) {
+	 			if (tablero[x-1][i].equals(Ficha.VACIA) ) {
+					fila = i; 
+				}
 			}
-		}
+ 		}
  		return fila;
  	}
 	

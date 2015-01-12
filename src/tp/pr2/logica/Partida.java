@@ -250,6 +250,9 @@ public class Partida {
 		if (contadorAlto >= 3) {
 			altoOk = true;
 		}
+		else{
+			contadorAlto = 0;
+		}
 		return altoOk;
 	}
 
@@ -401,50 +404,30 @@ public class Partida {
 	}
 	
 	public static void main(String[] args) {
-//
-//		Tablero NuevoTablero = new Tablero(5,5);
-//		NuevoTablero.reset();
-//		Partida nuevaPartida = new Partida(NuevoTablero);
-//		for (int i = 1; i <= 6; i++) {		
-//			for (int j = 0; j < 10; j++) {
-//				System.out.print(nuevaPartida.pila.getArrayJugadas()[j]);
-//			}
-//			System.out.println();
-//			nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), i);
-//			NuevoTablero.pintarTablero();
-//			System.out.println("-----------------");
-//		}
-//		System.err.println("segundo bucle");
-//		for (int i = 1; i <= 6; i++) {		
-//			for (int j = 0; j < 10; j++) {
-//				System.out.print(nuevaPartida.pila.getArrayJugadas()[j]);
-//			}
-//			System.out.println();
-//			nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), i);
-//			NuevoTablero.pintarTablero();
-//			System.out.println("---------------");
-//		}
-//		System.err.println("tercer bucle");
-//		for (int i = 1; i <= 6; ++i) {		
-//			for (int j = 0; j < 10; j++) {
-//				System.out.print(nuevaPartida.pila.getArrayJugadas()[j]);
-//			}
-//			System.out.println();
-//			nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), i);
-//			NuevoTablero.pintarTablero();
-//			System.out.println("----------------");
-//		}
-//		for (int i = 0; i < 11; i++) {
-//			System.out.println("undo!");
-//			nuevaPartida.undo();
-//			NuevoTablero.pintarTablero();
-//		}
-//		System.out.println(nuevaPartida.getTablas());
-//		
-//		nuevaPartida.ejecutaMovimiento(nuevaPartida.getTurno(), 1);
-//		NuevoTablero.pintarTablero();
-//		nuevaPartida.undo();
-//		NuevoTablero.pintarTablero();
+		ReglasJuego r = new ReglasConecta4();
+		Partida p = new Partida(r);
+		
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 3; j++) {
+				Movimiento m = new MovimientoConecta4(i, p.getTurno());
+				p.ejecutaMovimiento(m);
+				p.getTablero().pintarTablero();
+				if (p.comprobarTodo(m)){
+					System.out.println(" pollas ");
+				}
+			}
+		}
+		
+	}
+
+	public boolean comprobarTodo(Movimiento ultimoMovimiento) {
+		boolean ok = false;
+		pila.setArrayJugadas(pila.getContadorArrayJugadas() + 1, ultimoMovimiento.getColumnaMovimiento());
+		pila.plusPlusContador();
+		if (comprobarAncho() || comprobarAlto() || comprobarDiagonal()) {
+			ok = true;
+		}
+		return ok;
 	}
 }
 

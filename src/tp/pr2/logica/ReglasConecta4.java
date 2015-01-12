@@ -21,7 +21,13 @@ public class ReglasConecta4 implements ReglasJuego{
 
 	@Override
 	public Ficha hayGanador(Movimiento ultimoMovimiento, Tablero t) {
-		return ultimoMovimiento.getJugador();
+		Ficha ganador = Ficha.VACIA;
+		Partida p;
+		p = new Partida(t);
+		if(p.comprobarTodo(ultimoMovimiento)){
+			ganador = ultimoMovimiento.getJugador();
+		}
+		return ganador;
 	}
 
 	@Override
