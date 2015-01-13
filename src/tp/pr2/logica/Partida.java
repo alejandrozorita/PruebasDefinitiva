@@ -217,6 +217,9 @@ public class Partida {
 		else if (comprobarAncho() || comprobarAlto() || comprobarDiagonal()) {
 			terminada = true;
 		}
+		else if (comprobarAlto()) {
+			terminada = true;
+		}
 		else if (tablas == getTablero().getAlto() *getTablero().getAncho()) {
 			terminada = true;
 		}
@@ -271,11 +274,11 @@ public class Partida {
 			do {
 				casilla = tablero.getCasilla(columna, fila);
 				siguienteCasilla = tablero.getCasilla(columna + 1, fila);
-				if (casilla.equals(siguienteCasilla)) {
+				if (casilla.equals(siguienteCasilla) && (!casilla.equals(Ficha.VACIA))) {
 					contadorAncho++;
 					columna++;
 				} 
-			} while (casilla.equals(siguienteCasilla) && contadorAncho < 3);
+			} while (casilla.equals(siguienteCasilla) && contadorAncho < 3 && (!casilla.equals(Ficha.VACIA)));
 		}
 		//------------------
 		if (contadorAncho != 3) {
@@ -287,11 +290,11 @@ public class Partida {
 				do {
 					casilla = tablero.getCasilla(columna, fila);
 					siguienteCasilla = tablero.getCasilla(columna -1, fila);
-					if (casilla.equals(siguienteCasilla)) {
+					if (casilla.equals(siguienteCasilla) && (!casilla.equals(Ficha.VACIA))) {
 						contadorAncho++;
 						columna--;
 					} 
-				} while (casilla.equals(siguienteCasilla) && contadorAncho < 3);
+				} while (casilla.equals(siguienteCasilla) && contadorAncho < 3 && (!casilla.equals(Ficha.VACIA)));
 			}
 		}
 		if (contadorAncho >= 3) {
@@ -404,7 +407,7 @@ public class Partida {
 	}
 	
 	public static void main(String[] args) {
-		ReglasJuego r = new ReglasConecta4();
+		/*ReglasJuego r = new ReglasConecta4();
 		Partida p = new Partida(r);
 		
 		for (int i = 0; i < 6; i++) {
@@ -416,11 +419,12 @@ public class Partida {
 					System.out.println(" pollas ");
 				}
 			}
-		}
+		}*/
 		
 	}
 
-	public boolean comprobarTodo(Movimiento ultimoMovimiento) {
+/*	public boolean comprobarTodo(Movimiento ultimoMovimiento) {
+	
 		boolean ok = false;
 		pila.setArrayJugadas(pila.getContadorArrayJugadas() + 1, ultimoMovimiento.getColumnaMovimiento());
 		pila.plusPlusContador();
@@ -428,7 +432,7 @@ public class Partida {
 			ok = true;
 		}
 		return ok;
-	}
+	}*/
 }
 
 
