@@ -90,6 +90,7 @@ public class Partida {
  * @param col
  * @return posible
  */
+	
 	public boolean ejecutaMovimiento(Movimiento movimiento){
 		boolean posible = true;
 		int auxContadorArrayJugadas = 1;
@@ -423,7 +424,7 @@ public class Partida {
 		
 	}
 
-/*	public boolean comprobarTodo(Movimiento ultimoMovimiento) {
+	public boolean comprobarTodo(Movimiento ultimoMovimiento) {
 	
 		boolean ok = false;
 		pila.setArrayJugadas(pila.getContadorArrayJugadas() + 1, ultimoMovimiento.getColumnaMovimiento());
@@ -432,7 +433,9 @@ public class Partida {
 			ok = true;
 		}
 		return ok;
-	}*/
+
+	}
+	
 }
 
 

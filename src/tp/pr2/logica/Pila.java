@@ -6,10 +6,14 @@ import tp.pr2.logica.Tablero;
 public class Pila {
 	private int [] arrayJugadas;
 	private int contadorArrayJugadas;
+	private Ficha[] arrayFichasUndo;
+	private int posicionUltimaFichaEnI;
+	private int auxContadorArrayJugadas;
 	
 	public Pila(){
 		this.arrayJugadas = new int[10];
 		contadorArrayJugadas = 0;
+		arrayFichasUndo = new Ficha[10];
 	}
 	
 	public void reset(){
@@ -50,6 +54,15 @@ public class Pila {
 		return contadorArrayJugadas;
 	}
 	
+	public void setContadorArrayJugadas(int i) {
+		contadorArrayJugadas = i;
+	}
+	
+	public int posicionUltimaFichaI(int columna){
+		//Sacamos la posicion Y del tablero de la última jugada
+		return posicionUltimaFichaEnI = columna;
+	}
+	
 	public void undo (Ficha turno, int tablas, boolean reseteada,Tablero tablero){
 		@SuppressWarnings("unused")
 		boolean ok = true;
@@ -62,7 +75,7 @@ public class Pila {
 		else{
 			
 			//Iniciamos contador para no machacar contador original de partida
-			int auxContadorArrayJugadas = 0;
+			auxContadorArrayJugadas = 0;
 
 			//Si contador es mayor que length de array es porque apunta a ultima direcccion
 			if (contadorArrayJugadas > arrayJugadas.length - 1) {
@@ -75,10 +88,9 @@ public class Pila {
 				ok = false;
 			}
 			else{
-			//Sacamos la posicion Y del tablero de la última jugada
-			int posicionUltimaFichaEnI = (tablero.fichaUltimaJugada(arrayJugadas[contadorArrayJugadas - 1]));
+			
 			//Pasamos X e Y a tablero para que ponga vacia en la posicion de la ultima jugada
-			tablero.setCasilla(/*Pasamos la x*/arrayJugadas[contadorArrayJugadas - 1], /*Pasamos la i*/(posicionUltimaFichaEnI + 2), /*Pasamos la vacia*/Ficha.VACIA);
+			tablero.setCasilla(/*Pasamos la x*/arrayJugadas[contadorArrayJugadas - 1], /*Pasamos la i*/(posicionUltimaFichaI(tablero.fichaUltimaJugada(arrayJugadas[contadorArrayJugadas - 1])) + 2), /*Pasamos la vacia*/Ficha.VACIA);
 			//Ponemos a -1 launcher posicion del array
 			arrayJugadas[contadorArrayJugadas-1] = -1;
 			contadorArrayJugadas = auxContadorArrayJugadas;
@@ -90,10 +102,28 @@ public class Pila {
 			}
 		}
 	}
-
-	public void setContadorArrayJugadas(int i) {
-		contadorArrayJugadas = i;
+	
+	/**
+	 * Funcion tipoca Set para el array de tipo Movimiento del Complica
+	 * 
+	 * @return arrayMovimientosUndo
+	 */
+	public Ficha[] getArrayFichaUndo(){
+		return arrayFichasUndo;
 	}
 	
-	
+	/**
+	 * Recibe 2 parametros, contador INT y m Movimiento.
+	 * 
+	 * Hace funcion tipica Set y guarda en la posicion contador, el Movimiento m
+	 * 
+	 * @param contador
+	 * @param m
+	 * 
+	 * 
+	 */
+	public void setArrayMoimientosJugadas(int contador, Ficha f){
+		arrayFichasUndo[contador - 1] = f;
+	}
+
 }

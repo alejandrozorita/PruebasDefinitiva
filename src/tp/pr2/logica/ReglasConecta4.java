@@ -25,8 +25,10 @@ public class ReglasConecta4 implements ReglasJuego{
 		if(comprobarAlto(t, ultimoMovimiento) || comprobarAncho(t, ultimoMovimiento) || comprobarDiagonal(t, ultimoMovimiento)){
 			ganador = ultimoMovimiento.getJugador();
 		}
+
 		return ganador;
 	}
+
 
 	@Override
 	public boolean tablas(Ficha ultimoEnPoner, Tablero t) {

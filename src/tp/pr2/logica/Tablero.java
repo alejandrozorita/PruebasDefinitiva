@@ -164,8 +164,14 @@ public class Tablero {
 					fila = i; 
 				}
 			}
- 		}
+ 		} 
  		return fila;
+ 	}
+ 	
+ 	public void desplazarColumnaComplica(int columna){
+ 		for (int i = 1; i < getAlto() ;i++) {
+			setCasilla(i, columna, getCasilla(i-1, columna));
+		}
  	}
 	
  	public static void main(String[] args) {
