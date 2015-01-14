@@ -39,7 +39,8 @@ public class MovimientoComplicaTest extends MovimientoConecta4Test {
 		for (int i=0; i<fichas.length; i++) {
 			Movimiento mov = getMovimiento(1, fichas[i]);
 			mov.ejecutaMovimiento(t);
-			
+			System.out.println(i);
+			t.pintarTablero();
 			// Comprobar desplazamiento
 			if (i >= t.getAlto()) {
 				for (int j=0; j<t.getAlto(); j++) {

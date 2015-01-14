@@ -172,6 +172,7 @@ public class Tablero {
  		for (int i = 1; i < getAlto() ;i++) {
 			setCasilla(i, columna, getCasilla(i-1, columna));
 		}
+ 		setCasilla(getAlto()-1, columna, Ficha.VACIA);
  	}
 	
  	public static void main(String[] args) {
