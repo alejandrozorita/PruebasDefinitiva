@@ -6,4 +6,5 @@ public interface ReglasJuego {
 	Ficha hayGanador(Movimiento ultimoMovimiento,Tablero t);
 	boolean tablas(Ficha ultimoEnPoner,Tablero t);
 	Ficha siguienteTurno(Ficha ultimoEnPoner,Tablero t);
+	int getReglas();
 }

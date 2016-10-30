@@ -3,10 +3,16 @@ package tp.pr2.logica;
 import tp.pr2.logica.Ficha;
 
 public class MovimientoConecta4 extends Movimiento {
+	
+	private int claseRegla = 1;
 
 	public MovimientoConecta4(int donde, Ficha color){
 		jugador = color;
 		ColumnaMovimiento = donde;
+	}
+	
+	public int getClaseRegla(){
+		return claseRegla;
 	}
 	
 	public int getColumnaMovimiento(){

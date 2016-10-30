@@ -18,6 +18,11 @@ public class Partida {
 	private int tablas = 0;
 	private boolean reseteada = false;
 	private Pila pila;
+	private int tipoPartida;
+	private Ficha CuatroEnRaya = Ficha.VACIA;
+	private Ficha CuatroEnRayaAnterior = Ficha.VACIA;
+	private boolean terminadaDesplazamiento;
+	private boolean desplazamiento = false;
 
 	/**
 	 * Constructor por parametros de Partida
@@ -43,6 +48,7 @@ public class Partida {
 	}
 	
 	public Partida(ReglasJuego reglas){
+		tipoPartida = reglas.getReglas();
 		this.tablero = reglas.iniciaTablero();
 		turno = reglas.jugadorInicial();
 		ganador = Ficha.VACIA;
@@ -100,13 +106,26 @@ public class Partida {
 			//Si la columna esta en rango pasa el if
 			if ((movimiento.getColumnaMovimiento() > 0) &&(movimiento.getColumnaMovimiento() < tablero.getAncho()+1)) {	
 				//Si es posible ejecutar movimiento Salta este if y va al else
-				if ((turno == Ficha.VACIA) ||(turno != movimiento.getJugador()) || (tablero.fichaUltimaJugada(movimiento.getColumnaMovimiento()) < 0)) {
+				if ((turno == Ficha.VACIA) ||(turno != movimiento.getJugador()) /*|| (tablero.fichaUltimaJugada(movimiento.getColumnaMovimiento()) < 0)*/) {
+					posible = false;
+				}
+				else if((tablero.fichaUltimaJugada(movimiento.getColumnaMovimiento()) < 0) && movimiento.getClaseRegla() == 1) {
 					posible = false;
 				}
 				else
 				{
 					reseteada = false;
-					tablero.setCasilla(movimiento.getColumnaMovimiento(), tablero.fichaUltimaJugada(movimiento.getColumnaMovimiento()) + 1,  movimiento.getJugador());
+					/*tablero.setCasilla(movimiento.getColumnaMovimiento(), tablero.fichaUltimaJugada(movimiento.getColumnaMovimiento()) + 1,  movimiento.getJugador());*/
+					movimiento.ejecutaMovimiento(tablero);
+					/*if (tipoPartida == 2) {
+						if(tablero.fichaUltimaJugada(movimiento.getColumnaMovimiento()) < 0){
+							desplazamiento = true;
+							terminadaDesplazamiento = comprobarTodoDesplazamiento();
+						}
+						if (comprobarTodo()) {
+							CuatroEnRaya = movimiento.getJugador();
+						}
+					}*/
 					if (turno == Ficha.BLANCA) {
 						turno = Ficha.NEGRA;
 					} else if(turno == Ficha.NEGRA) {
@@ -128,7 +147,9 @@ public class Partida {
 					}
 					pila.aumentarContador();
 					//mueves el array una posici�n a la izquierda
-					tablas++;
+					if(movimiento.getClaseRegla() == 1){
+						tablas++;
+					}
 				}
 			}
 			else {
@@ -212,21 +233,56 @@ public class Partida {
 	 */
 	public boolean isTerminada() {
 		terminada = false;
-		if (tablas == 0 || pila.getContadorArrayJugadas() == 0) {
+		/*if(CuatroEnRaya != 1){
+			CuatroEnRaya = 0;
+		}*/
+		if ((tablas == 0) && (tipoPartida == 1)) {
 			terminada = false;
 		}
-		else if (comprobarAncho() || comprobarAlto() || comprobarDiagonal()) {
+		else if(pila.getContadorArrayJugadas() == 0){
+			terminada = false;
+		}
+		/*else if(tipoPartida == 2 && (comprobarAncho() || comprobarAlto() || comprobarDiagonal())){
+			
+			if (desplazamiento) {
+				if (CuatroEnRaya == getTurnoAnterior()) {
+					terminada = true;
+				}
+			} else {
+				if(comprobarTodo()){
+					terminada = true;
+				}
+			}
+		}
+		
+		else if(tipoPartida == 2){
+			if(desplazamiento){
+				if (comprobarTodoDesplazamiento()) {
+					terminada = true;
+				}	
+			}
+			else {
+				if(comprobarTodo()){
+					terminada = true;
+				}
+			}
+		}
+		*/
+		else if(tipoPartida == 2 && comprobar()){
 			terminada = true;
 		}
-		else if (comprobarAlto()) {
+		else if (tipoPartida == 1 && comprobarAncho() || comprobarAlto() || comprobarDiagonal()) {
 			terminada = true;
 		}
-		else if (tablas == getTablero().getAlto() *getTablero().getAncho()) {
+		else if ((tablas == getTablero().getAlto() *getTablero().getAncho()) && (tipoPartida == 1)) {
 			terminada = true;
 		}
 		else if (pila.getContadorArrayJugadas() == 0) {
 			terminada = false;
 		}
+		/*else if (terminadaDesplazamiento) {
+			terminada = true;
+		}*/
 		return terminada;
 	}
 
@@ -245,11 +301,11 @@ public class Partida {
 			do {
 				casilla = tablero.getCasilla(columna, fila);
 				siguienteCasilla = tablero.getCasilla(columna, fila + 1);
-				if (casilla.equals(siguienteCasilla)) {
+				if (casilla.equals(siguienteCasilla) && !casilla.equals(Ficha.VACIA)) {
 					contadorAlto++;
 					fila++;
 				} 
-			} while (casilla.equals(siguienteCasilla) && contadorAlto < 3);
+			} while (casilla.equals(siguienteCasilla) && contadorAlto < 3 && (!casilla.equals(Ficha.VACIA)));
 		}
 		if (contadorAlto >= 3) {
 			altoOk = true;
@@ -399,41 +455,240 @@ public class Partida {
 	 * @return turno
 	 */
 	public Ficha getTurnoAnterior(){
+		Ficha f = Ficha.VACIA;
 		if (turno == Ficha.BLANCA) {
-			turno = Ficha.NEGRA;
+			f = Ficha.NEGRA;
 		} else if (turno == Ficha.NEGRA){
-			turno = Ficha.BLANCA;
+			f = Ficha.BLANCA;
 		}
-		return turno;
+		return f;
 	}
 	
 	public static void main(String[] args) {
-		/*ReglasJuego r = new ReglasConecta4();
-		Partida p = new Partida(r);
-		
-		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 3; j++) {
-				Movimiento m = new MovimientoConecta4(i, p.getTurno());
-				p.ejecutaMovimiento(m);
-				p.getTablero().pintarTablero();
-				if (p.comprobarTodo(m)){
-					System.out.println(" pollas ");
-				}
-			}
-		}*/
-		
+		Partida p = new Partida(new ReglasComplica());
+		Tablero t = p.getTablero();
+		t.setCasilla(1, 7, Ficha.NEGRA);
+		t.setCasilla(2, 7, Ficha.NEGRA);
+		t.setCasilla(3, 7, Ficha.NEGRA);
+		t.setCasilla(4, 7, Ficha.NEGRA);
+		t.setCasilla(1, 6, Ficha.BLANCA);
+		t.setCasilla(2, 6, Ficha.BLANCA);
+		t.setCasilla(3, 6, Ficha.BLANCA);
+		t.pintarTablero();
+		Movimiento mov = new MovimientoComplica(4, Ficha.BLANCA);
+		p.ejecutaMovimiento(mov);
+		t.pintarTablero();
+		if (p.isTerminada()) {
+			System.out.println("hol");
+		}
 	}
 
-	public boolean comprobarTodo(Movimiento ultimoMovimiento) {
-	
+
+	/*private boolean comprobarTodo() {
 		boolean ok = false;
-		pila.setArrayJugadas(pila.getContadorArrayJugadas() + 1, ultimoMovimiento.getColumnaMovimiento());
-		pila.plusPlusContador();
-		if (comprobarAncho() || comprobarAlto() || comprobarDiagonal()) {
+		boolean cuatroRaya = false;
+		int cantidad = 0;
+		for (int i = 1; i < tablero.getAlto(); i++) {
+			for (int j = 1; j < tablero.getAncho(); j++) {
+				if (comprobarAncho(i, j) || comprobarAlto(i, j) || comprobarDiagonal(i, j)) {
+					cuatroRaya = true;
+					}
+				}
+			if(cuatroRaya == true)
+				cantidad++;
+			}
+		if(cantidad == 1){
 			ok = true;
 		}
 		return ok;
+	}*/
+	
+	/*private boolean comprobarTodoDesplazamiento(){
+		boolean ok = false; 	
+			for (int i = 0; i < tablero.getAlto()-1; i++) {
+				for (int j = 0; j < tablero.getAncho()-1; j++) {
+					if (comprobarAncho(i, j) || comprobarAlto(i, j) || comprobarDiagonal(i, j)) {
+						CuatroEnRaya = tablero.getCasilla(i, j);
+						if (CuatroEnRayaAnterior == Ficha.VACIA) {
+							CuatroEnRayaAnterior = CuatroEnRaya;
+							ok = true;
+						}
+						else if (CuatroEnRaya != CuatroEnRayaAnterior) {
+							return false;
+						}
+					}
+				}
+		}	
+		return ok;
+	}*/
+	
+	private boolean comprobar(){
+		Ficha [] array;
+		array = new Ficha[tablero.getAlto()*tablero.getAncho()];
+		boolean ok = true;
+		int contadorArray = 0;
+		for (int i = 0; i < tablero.getAlto(); i++) {
+			for (int j = 0; j < tablero.getAncho(); j++) {
+				if (comprobarAncho(i, j) || comprobarAlto(i, j) || comprobarDiagonal(i, j)) {
+					array[contadorArray] = tablero.getCasilla(j, i);
+					contadorArray++;
+				}
+			}
+		}
+		if (recorrerArray(array)) {
+			ok = false;
+		}
+		return ok;
+	}
+	
+	private boolean recorrerArray(Ficha [] array){
+		boolean masDeUno = true;
+		int contador = 0;
+		int i = 0;
+		while(array[i] == array[i + 1] && i < array.length){
+			contador++;
+			i++;
+		}
+		if (contador == 1) {
+			masDeUno = false;
+		}
+		return masDeUno;
+	}
+	
+	private boolean comprobarAlto(int columnad, int filad) {
+		boolean altoOk = false;
+		int fila, columna, contadorAlto = 0;
+		Ficha casilla, siguienteCasilla;
+		fila = filad;
+		columna = columnad;
+		//COMPROBAR ALTO HACIA ABAJO
+		if (fila + 2 < tablero.getAlto()) {
+			do {
+				casilla = tablero.getCasilla(columna, fila);
+				siguienteCasilla = tablero.getCasilla(columna, fila + 1);
+				if (casilla.equals(siguienteCasilla) && !casilla.equals(Ficha.VACIA)) {
+					contadorAlto++;
+					fila++;
+				} 
+			} while (casilla.equals(siguienteCasilla) && contadorAlto < 3 && (!casilla.equals(Ficha.VACIA)));
+		}
+		if (contadorAlto >= 3) {
+			altoOk = true;
+		}
+		else{
+			contadorAlto = 0;
+		}
+		return altoOk;
+	}
+	
+	private boolean comprobarAncho(int columnad, int filad) {
+		boolean anchoOk = false;
+		int fila, columna, contadorAncho = 0;
+		Ficha casilla, siguienteCasilla;
+		fila = filad;
+		columna = columnad;
+		//COMPROBAR EL ANCHO HACIA LA DERECHA 
+		if (columna  < tablero.getAncho()) {
+			do {
+				casilla = tablero.getCasilla(columna, fila);
+				siguienteCasilla = tablero.getCasilla(columna + 1, fila);
+				if (casilla.equals(siguienteCasilla) && (!casilla.equals(Ficha.VACIA))) {
+					contadorAncho++;
+					columna++;
+				} 
+			} while (casilla.equals(siguienteCasilla) && contadorAncho < 3 && (!casilla.equals(Ficha.VACIA)));
+		}
+		//------------------
+		if (contadorAncho != 3) {
+			contadorAncho = 0;
+		}
+		//COMPROBAR EL ANCHO HACIA LA IZQUIERDA 
+		if(contadorAncho == 0){
+			if (columna - 2 > 0) {
+				do {
+					casilla = tablero.getCasilla(columna, fila);
+					siguienteCasilla = tablero.getCasilla(columna -1, fila);
+					if (casilla.equals(siguienteCasilla) && (!casilla.equals(Ficha.VACIA))) {
+						contadorAncho++;
+						columna--;
+					} 
+				} while (casilla.equals(siguienteCasilla) && contadorAncho < 3 && (!casilla.equals(Ficha.VACIA)));
+			}
+		}
+		if (contadorAncho >= 3) {
+			anchoOk = true;
+		}
+		return anchoOk;
+	}
+	
+	private boolean comprobarDiagonal(int columnad, int filad){
+		int fila, columna;
+		Ficha casilla, siguienteCasilla;
+		boolean ok = false;
+		fila = filad;
+		columna = columnad;
+		//COMPROBAR DIAGONAL HACIA ARRIBA DERECHA
+		int diagonalMayor = 0;
+		int diagonalMenor = 0;
+		while ((fila > 0) && (columna < tablero.getAncho())) {
+			casilla = tablero.getCasilla(columna, fila);
+			siguienteCasilla = tablero.getCasilla(columna +1, fila - 1);
+			if ((casilla.equals(siguienteCasilla)) && (!casilla.equals(Ficha.VACIA))) {
+				diagonalMayor++;
+			}
+			fila--;
+			columna++;		
+		}
+		if (diagonalMayor >= 3) {
+			ok = true;
+		}
+		//COMPROBAR DIAGONAL HACIA ARRIBA IZQUIERDA	
+		fila = GetFilaUltimoMovimiento() + 2;
+		columna = GetColumnaUltimoMovimiento();
+		while ((fila > 0) && (columna > 0)) {
+			casilla = tablero.getCasilla(columna, fila);
+			siguienteCasilla = tablero.getCasilla(columna -1, fila - 1);
+			if ((casilla.equals(siguienteCasilla)) && (!casilla.equals(Ficha.VACIA))) {
+				diagonalMenor++;
+			}
+			fila--;
+			columna--;		
+		}
+		if (diagonalMenor >= 3) {
+			ok = true;
+		}
+		//COMPROBAR DIAGONAL ABAJO IZQUIERDA
+		fila = GetFilaUltimoMovimiento() + 2;
+		columna = GetColumnaUltimoMovimiento();
+		while ((fila < tablero.getAlto()) && (columna > 0)) {
+			casilla = tablero.getCasilla(columna, fila);
+			siguienteCasilla = tablero.getCasilla(columna -1, fila +1);
+			if ((casilla.equals(siguienteCasilla)) && (!casilla.equals(Ficha.VACIA))) {
+				diagonalMayor++;
+			}
+			fila++;
+			columna--;		
+		}
+		if (diagonalMayor >= 3) {
+			ok = true;
+		}
+		//COMPROBAR DIAGONAL ABAJO DERECHA
+		fila = GetFilaUltimoMovimiento() + 2;
+		columna = GetColumnaUltimoMovimiento();
+		while ((fila < tablero.getAlto()) && (columna < tablero.getAncho())) {
+			casilla = tablero.getCasilla(columna, fila);
+			siguienteCasilla = tablero.getCasilla(columna +1, fila +1);
+			if ((casilla.equals(siguienteCasilla)) && (!casilla.equals(Ficha.VACIA))) {
+				diagonalMenor++;
+			}
+			fila++;
+			columna++;		
+		}
+		if (diagonalMenor >= 3) {
+			ok = true;
+		}
 
+		return ok;
 	}
 	
 }

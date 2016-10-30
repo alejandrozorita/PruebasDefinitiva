@@ -146,7 +146,7 @@ public class Tablero {
  	 * @param color
  	 */
  	public void setCasilla(int x,int y, Ficha color) {
- 		if((x > 0) && (y > 0) && (x <= ancho) && (y <= alto)){
+ 		if((x > 0) && (y >= 0) && (x <= ancho) && (y <= alto)){
  		tablero[x-1][y-1] = color;
  		}
  	}

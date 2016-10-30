@@ -114,6 +114,7 @@ public class PartidaComplicaTest {
 		assertEquals("No debería haber ganador si no hay 4 en raya", p.getGanador(), Ficha.VACIA);
 		
 		assertTrue(p.ejecutaMovimiento(getMovimiento(4, p.getTurno())));
+		p.getTablero().pintarTablero();
 		assertFalse("La partida no debería terminar si hay 4 en raya de ambos colores en el tablero", p.isTerminada());
 		assertEquals("No debería haber ganador si hay 4 en raya de ambos colores en el tablero", p.getGanador(), Ficha.VACIA);
 	}

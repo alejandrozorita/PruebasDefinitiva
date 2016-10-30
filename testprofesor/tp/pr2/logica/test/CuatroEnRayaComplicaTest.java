@@ -92,6 +92,9 @@ public class CuatroEnRayaComplicaTest extends CuatroEnRayaConecta4Test {
 		Movimiento mov = getMovimiento(posX[ultima], p.getTurno());
 		assertTrue(p.ejecutaMovimiento(mov));
 		
+		//!!
+		System.out.println(t);
+		
 		assertTrue("Partida no terminada tras cuatro en raya de " + color, p.isTerminada());
 		assertTrue("HayGanador incorrecto tras victoria de" + color, r.hayGanador(mov, t) == color);
 		assertFalse("tablas incorrecto tras victoria de" + color, r.tablas(color, t));

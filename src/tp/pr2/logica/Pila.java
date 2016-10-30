@@ -7,6 +7,7 @@ public class Pila {
 	private int [] arrayJugadas;
 	private int contadorArrayJugadas;
 	private Ficha[] arrayFichasUndo;
+	@SuppressWarnings("unused")
 	private int posicionUltimaFichaEnI;
 	private int auxContadorArrayJugadas;
 	

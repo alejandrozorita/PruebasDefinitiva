@@ -19,7 +19,7 @@ import tp.pr2.logica.Tablero;
 public class CuatroEnRayaConecta4Test {
 	
 	protected ReglasJuego r;
-	
+	int ini =0;
 	@Before
 	public void init() {
 		r = getReglas();
@@ -125,8 +125,7 @@ public class CuatroEnRayaConecta4Test {
 		assertFalse("Partida terminada de forma anticipada con un tablero con tres fichas de color " + color, p.isTerminada());
 		Movimiento mov = getMovimiento(posX[ultima], color);
 		assertTrue(p.ejecutaMovimiento(mov));
-		
-		assertTrue("Partida no terminada tras cuatro en raya de " + color, p.isTerminada());
+		assertTrue("Partida no terminada tras cuatro en raya de " + color, p.isTerminada());	
 		assertTrue("HayGanador incorrecto tras victoria de" + color, r.hayGanador(mov, t) == color);
 		assertFalse("tablas incorrecto tras victoria de" + color, r.tablas(color, t));
 		assertEquals("Ganador incorrecto tras victoria de " + color, color, p.getGanador());

@@ -25,14 +25,24 @@ public class ReglasConecta4 implements ReglasJuego{
 		if(comprobarAlto(t, ultimoMovimiento) || comprobarAncho(t, ultimoMovimiento) || comprobarDiagonal(t, ultimoMovimiento)){
 			ganador = ultimoMovimiento.getJugador();
 		}
-
 		return ganador;
 	}
 
-
 	@Override
 	public boolean tablas(Ficha ultimoEnPoner, Tablero t) {
-		return false;
+		int tablas = 0;
+		boolean terminada = false;
+		for (int i = 1; i <=t.getAncho() ; i++) {
+			for (int j = 1; j <= t.getAlto(); j++) {
+				if (t.getCasilla(i, j) != Ficha.VACIA) {
+					tablas++;
+				}
+			}
+		}
+		if(tablas == t.getAlto() * t.getAlto()){
+			terminada = true;
+		}
+		return terminada;
 	}
 
 	@Override
@@ -190,6 +200,11 @@ public class ReglasConecta4 implements ReglasJuego{
 
 	public static void main(String[] args){
 		
+	}
+
+	@Override
+	public int getReglas() {
+		return 1;
 	}
 
 }
